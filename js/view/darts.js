@@ -20,7 +20,8 @@ Darts = Backbone.View.extend(function () {
             // Create the board
             view.subviews.Board = new Board({
                 players: event.players,
-                game: event.game
+                game: event.game,
+                cut: event.cut
             });
 
             // Assign the board to the wrapper and render

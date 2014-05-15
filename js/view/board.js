@@ -113,6 +113,7 @@ Board = Backbone.View.extend(function () {
             player: 'player1',
             players: view.options.players,
             game: view.options.game,
+            cut: view.options.cut,
             rounds: 0,
             actions: []
         };
