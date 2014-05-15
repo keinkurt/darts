@@ -35,7 +35,7 @@
                 $player = $('.' + player, $target.parent()),
                 currentMarks = $player.text(),
                 valueText = $target.text(),
-                value = parseInt(valueText, 10) || 25,
+                value = parseInt(valueText, 10) || valueText,
                 currentMark;
 
             // Delay the highlight so that it runs after re-render is complete.
@@ -57,7 +57,13 @@
 
             if (currentMarks === '(X)') {
                 if (currentMark.canScorePoints(player)) {
-                    view.scores[player] += value;
+                    if (typeof value === 'number') {
+                        view.scores[player] += value;
+                    }
+                    else {
+                        valueText = (value == 'B') ? '25' : prompt('');
+                        view.scores[player] += parseInt(valueText);
+                    }
                     view.state.actions.push({
                         type: 'points',
                         player: player,
