@@ -35,7 +35,7 @@
                 $player = $('.' + player, $target.parent()),
                 currentMarks = $player.text(),
                 valueText = $target.text(),
-                value = parseInt(valueText, 10) || 25,
+                value = parseInt(valueText, 10) || valueText,
                 currentMark;
 
             // Delay the highlight so that it runs after re-render is complete.
@@ -57,6 +57,11 @@
 
             if (currentMarks === '(X)') { // at current player the mark is closed
                 if (view.state.cut === true) { // game with option Cut Throat
+                    if (typeof value !== 'number') {
+                        valueText = (value == 'B') ? '25' : prompt('');
+                        value = parseInt(valueText, 10);
+                    }
+
                     for (i = 0; i <= view.state.players; i++) {
                         if ( $('.player' + i, $target.parent()).text() !== '(X)' ) {
                             // the other player has got open the mark and gets points
@@ -71,7 +76,14 @@
                 }
                 else if (currentMark.canScorePoints(player)) { // game without option Cut Throat
                     // some one has open this mark - the player gets points
-                    view.scores[player] += value;
+                    if (typeof value === 'number') {
+                        view.scores[player] += value;
+                    }
+                    else {
+                        valueText = (value == 'B') ? '25' : prompt('');
+                        view.scores[player] += parseInt(valueText, 10);
+                    }
+
                     view.state.actions.push({
                         type:    'points',
                         player:  player,
