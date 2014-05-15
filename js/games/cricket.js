@@ -50,18 +50,32 @@
                 }
             });
 
-            if (currentMarks === '(X)') {
-                if (currentMark.canScorePoints(player)) {
+            if (currentMarks === '(X)') { // at current player the mark is closed
+                if (view.state.cut === true) { // game with option Cut Throat
+                    for (i = 0; i <= view.state.players; i++) {
+                        if ( $('.player' + i, $target.parent()).text() !== '(X)' ) {
+                            // the other player has got open the mark and gets points
+                            view.scores['player'+i] += value;
+                            view.state.actions.push({
+                                type:    'points',
+                                player:  'player'+i,
+                                value:   valueText
+                            });
+                        }
+                    }
+                }
+                else if (currentMark.canScorePoints(player)) { // game without option Cut Throat
+                    // some one has open this mark - the player gets points
                     view.scores[player] += value;
-                    view.state.actions.push({ 
-                        type: 'points',
-                        player: player,
-                        value: valueText
+                    view.state.actions.push({
+                        type:    'points',
+                        player:  player,
+                        value:   valueText
                     });
                 }
             }
             else {
-                view.state.actions.push({ 
+                view.state.actions.push({
                     type: 'add',
                     player: player,
                     value: valueText
