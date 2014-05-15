@@ -7,6 +7,7 @@ Config = Backbone.View.extend(function () {
         'click .js-new-game': newGame,
         'click .js-players .button': updatePlayers,
         'click .js-game .button': updateGame,
+        'click .js-options .button': updateOptions,
     },
 
     overlayTemplate = [
@@ -31,6 +32,10 @@ Config = Backbone.View.extend(function () {
                         '<li><a href="#" class="button secondary"><%= name %></a></li>',
                     '<% }); %>',
                 '</ul>',
+                '<label for="tabs">Options</label>',
+                '<ul class="button-group js-options">',
+                     '<li><a href="#" name="cut" class="button secondary">Cut-Throat</a></li>',
+                '</ul>',
             '</div>',
             '<div class="modal-footer">',
                 '<a href="#" class="js-modal-close">Cancel</a>',
@@ -54,7 +59,8 @@ Config = Backbone.View.extend(function () {
 
         view.state = {
             players: 4,
-            game: 'Cricket'
+            game: 'Cricket',
+            cut: false
         };
 
         $('body')
@@ -117,7 +123,17 @@ Config = Backbone.View.extend(function () {
         view.$('.js-game .button').addClass('secondary');
         $target.removeClass('secondary');
     }
-   
+
+    function updateOptions(event) {
+        var view = this,
+            $target = $(event.currentTarget),
+            option = $target.prop('name');
+
+        view.state[option] = $target.hasClass('secondary') ? true : false;
+
+        $target.toggleClass('secondary');
+    }
+
     return {
         events: events,
         template: template,
