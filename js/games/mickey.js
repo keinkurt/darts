@@ -57,12 +57,16 @@
 
             if (currentMarks === '(X)') {
                 if (currentMark.canScorePoints(player)) {
-                    view.scores[player] += value;
-                    view.state.actions.push({
-                        type: 'points',
-                        player: player,
-                        value: valueText
-                    });
+                    for (i = 0; i <= view.state.players; i++) {
+                        if ( $('.player' + i, $target.parent()).text() !== '(X)' ) {
+                            view.scores['player'+i] += value;
+                            view.state.actions.push({
+                               type:    'points',
+                               player:  'player'+i,
+                               value:   valueText
+                            });
+                        }
+                    };
                 }
             }
             else {
