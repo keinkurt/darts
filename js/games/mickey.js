@@ -57,9 +57,20 @@
 
             if (currentMarks === '(X)') { // at current player the mark is closed
                 if (view.state.cut === true) { // game with option Cut Throat
-                    if (typeof value !== 'number') {
-                        valueText = (value == 'B') ? '25' : prompt('');
-                        value = parseInt(valueText, 10);
+                    if (value == 'B') {
+                        value = 25;
+                        valueText = '25';
+                    }
+                    else if (value == 'T' || value == 'D') {
+                        var base,
+                            factor = (value == 'T') ? 3 : 2;
+
+                        do {
+                            base = Number( prompt('Type in the base value!') );
+                        } while (isNaN(base) || base < 1 || base > 20);
+
+                        valueText = base * factor;
+                        value = valueText;
                     }
 
                     for (i = 0; i <= view.state.players; i++) {
@@ -79,9 +90,20 @@
                     if (typeof value === 'number') {
                         view.scores[player] += value;
                     }
+                    else if (value == 'B') {
+                        valueText = '25';
+                        view.scores[player] += valueText;
+                    }
                     else {
-                        valueText = (value == 'B') ? '25' : prompt('');
-                        view.scores[player] += parseInt(valueText, 10);
+                        var base,
+                            factor = (value == 'T') ? 3 : 2;
+
+                        do {
+                            base = Number( prompt('Type in the base value!') );
+                        } while (isNaN(base) || base < 1 || base > 20);
+
+                        valueText = base * factor;
+                        view.scores[player] += valueText;
                     }
 
                     view.state.actions.push({
