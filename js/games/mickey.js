@@ -59,7 +59,6 @@
                 if (view.state.cut === true) { // game with option Cut Throat
                     if (value == 'B') {
                         value = 25;
-                        valueText = '25';
                     }
                     else if (value == 'T' || value == 'D') {
                         var base,
@@ -69,21 +68,24 @@
                             base = Number( prompt('Type in the base value!') );
                         } while (isNaN(base) || base < 1 || base > 20);
 
-                        valueText = base * factor;
-                        value = valueText;
+                        value = base * factor;
                     }
 
-                    for (i = 0; i <= view.state.players; i++) {
+                    var scorer = [];
+                    for (i = 1; i <= view.state.players; i++) {
                         if ( $('.player' + i, $target.parent()).text() !== '(X)' ) {
                             // the other player has got open the mark and gets points
                             view.scores['player'+i] += value;
-                            view.state.actions.push({
-                                type:    'points',
-                                player:  'player'+i,
-                                value:   valueText
-                            });
+                            scorer.push('player'+i);
                         }
                     }
+                    view.state.actions.push({
+                        type:   'cut-points',
+                        player: player,
+                        scorer: scorer,
+                        value:  value,
+                        valueText: valueText
+                    });
                 }
                 else if (currentMark.canScorePoints(player)) { // game without option Cut Throat
                     // some one has open this mark - the player gets points
@@ -91,8 +93,8 @@
                         view.scores[player] += value;
                     }
                     else if (value == 'B') {
-                        valueText = '25';
-                        view.scores[player] += valueText;
+                        value = 25;
+                        view.scores[player] += value;
                     }
                     else {
                         var base,
@@ -102,14 +104,15 @@
                             base = Number( prompt('Type in the base value!') );
                         } while (isNaN(base) || base < 1 || base > 20);
 
-                        valueText = base * factor;
-                        view.scores[player] += valueText;
+                        value = base * factor;
+                        view.scores[player] += value;
                     }
 
                     view.state.actions.push({
                         type:    'points',
                         player:  player,
-                        value:   valueText
+                        value:   value,
+                        valueText: valueText
                     });
                 }
             }
@@ -117,7 +120,8 @@
                 view.state.actions.push({
                     type: 'add',
                     player: player,
-                    value: valueText
+                    value: value,
+                    valueText: valueText
                 });
             }
 
@@ -135,14 +139,22 @@
         }
 
         function undo(view, action, currentPlayer, cb) {
-            var type = action.type,
-                player = action.player,
-                valueText = action.value,
-                value = parseInt(valueText, 10) || 25;
+            var type        = action.type,
+                player      = action.player,
+                value       = action.value,
+                valueText   = action.valueText
 
-            if (action.type === 'points') {
+            if (type === 'points') {
                 view.scores[player] -= value;
                 view.$('.board-footer .' + player).text(view.scores[player]);
+            }
+            else if (type === 'cut-points') {
+                var scorer = action.scorer;
+                for ( i in scorer ) {
+                    view.scores[scorer[i]] -= value;
+                    view.$('.board-footer .' + scorer[i]).text(view.scores[scorer[i]]);
+                }
+
             }
 
             if (currentPlayer !== player) {
@@ -157,7 +169,7 @@
                 var modelValue = mark.get('value'),
                     currentScore;
 
-                if (modelValue === valueText) {
+                if (modelValue == valueText) {
                     currentScore = mark.get(player);
                     mark.set(player, --currentScore);
                 }
