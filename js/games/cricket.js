@@ -2,18 +2,34 @@
 
     global.Games = global.Games || {};
 
-    global.Games.Cricket = (function () {
+    global.Games.Cricket = genericCricket([
+        '20', '19', '18', '17', '16', '15', 'B'
+    ]);
+    global.Games.Mickey = genericCricket([
+        '20', '19', '18', '17', '16', '15', '14', '13', '12', 'T', 'D', 'B'
+    ]);
 
+    var numbers = [
+        '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'
+    ];
+
+    var wildcardNumbers = [];
+    for (var i = 0; i < 6; i++) {
+        var nextNumber = numbers[Math.floor(Math.random() * numbers.length)];
+        wildcardNumbers.push(nextNumber);
+        numbers = _.without(numbers, nextNumber)
+    }
+
+    wildcardNumbers.push('B');
+
+    global.Games.Wildcards  = genericCricket(wildcardNumbers);
+
+    function genericCricket(numbers) {
         function initialize(view) {
-            view.collection = new Marks([
-                { value: '20', players: view.options.players },
-                { value: '19', players: view.options.players },
-                { value: '18', players: view.options.players },
-                { value: '17', players: view.options.players },
-                { value: '16', players: view.options.players },
-                { value: '15', players: view.options.players },
-                { value: 'BULL', players: view.options.players }
-            ]);
+            view.collection = new Marks([]);
+            numbers.forEach( function (number) {
+                view.collection.push({ value: number, players: view.options.players });
+            } );
 
             view.scores = {
                 player1: 0,
@@ -30,7 +46,7 @@
                 $player = $('.' + player, $target.parent()),
                 currentMarks = $player.text(),
                 valueText = $target.text(),
-                value = parseInt(valueText, 10) || 25,
+                value = parseInt(valueText, 10) || valueText,
                 currentMark;
 
             // Delay the highlight so that it runs after re-render is complete.
@@ -52,25 +68,62 @@
 
             if (currentMarks === '(X)') { // at current player the mark is closed
                 if (view.state.cut === true) { // game with option Cut Throat
-                    for (i = 0; i <= view.state.players; i++) {
+                    if (value == 'B') {
+                        value = 25;
+                    }
+                    else if (value == 'T' || value == 'D') {
+                        var base,
+                            factor = (value == 'T') ? 3 : 2;
+
+                        do {
+                            base = Number( prompt('Type in the base value!') );
+                        } while (isNaN(base) || base < 1 || base > 20);
+
+                        value = base * factor;
+                    }
+
+                    var scorer = [];
+                    for (i = 1; i <= view.state.players; i++) {
                         if ( $('.player' + i, $target.parent()).text() !== '(X)' ) {
                             // the other player has got open the mark and gets points
                             view.scores['player'+i] += value;
-                            view.state.actions.push({
-                                type:    'points',
-                                player:  'player'+i,
-                                value:   valueText
-                            });
+                            scorer.push('player'+i);
                         }
                     }
+                    view.state.actions.push({
+                        type:   'cut-points',
+                        player: player,
+                        scorer: scorer,
+                        value:  value,
+                        valueText: valueText
+                    });
                 }
                 else if (currentMark.canScorePoints(player)) { // game without option Cut Throat
                     // some one has open this mark - the player gets points
-                    view.scores[player] += value;
+                    if (typeof value === 'number') {
+                        view.scores[player] += value;
+                    }
+                    else if (value == 'B') {
+                        value = 25;
+                        view.scores[player] += value;
+                    }
+                    else {
+                        var base,
+                            factor = (value == 'T') ? 3 : 2;
+
+                        do {
+                            base = Number( prompt('Type in the base value!') );
+                        } while (isNaN(base) || base < 1 || base > 20);
+
+                        value = base * factor;
+                        view.scores[player] += value;
+                    }
+
                     view.state.actions.push({
                         type:    'points',
                         player:  player,
-                        value:   valueText
+                        value:   value,
+                        valueText: valueText
                     });
                 }
             }
@@ -78,7 +131,8 @@
                 view.state.actions.push({
                     type: 'add',
                     player: player,
-                    value: valueText
+                    value: value,
+                    valueText: valueText
                 });
             }
 
@@ -96,14 +150,22 @@
         }
 
         function undo(view, action, currentPlayer, cb) {
-            var type = action.type,
-                player = action.player,
-                valueText = action.value,
-                value = parseInt(valueText, 10) || 25;
+            var type        = action.type,
+                player      = action.player,
+                value       = action.value,
+                valueText   = action.valueText
 
-            if (action.type === 'points') {
+            if (type === 'points') {
                 view.scores[player] -= value;
                 view.$('.board-footer .' + player).text(view.scores[player]);
+            }
+            else if (type === 'cut-points') {
+                var scorer = action.scorer;
+                for ( i in scorer ) {
+                    view.scores[scorer[i]] -= value;
+                    view.$('.board-footer .' + scorer[i]).text(view.scores[scorer[i]]);
+                }
+
             }
 
             if (currentPlayer !== player) {
@@ -113,12 +175,12 @@
                 view.state.player = player;
                 view.state.rounds--;
             }
-            
+
             view.collection.forEach(function (mark) {
                 var modelValue = mark.get('value'),
                     currentScore;
 
-                if (modelValue === valueText) {
+                if (modelValue == valueText) {
                     currentScore = mark.get(player);
                     mark.set(player, --currentScore);
                 }
@@ -134,6 +196,6 @@
             nextRound: nextRound,
             undo: undo
         };
-    }());
+    };
 
 }(window));
