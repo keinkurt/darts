@@ -68,12 +68,12 @@
 
             if (currentMarks === '(X)') { // at current player the mark is closed
                 if (view.state.cut === true) { // game with option Cut Throat
-                    if (value == 'B') {
+                    if (value === 'B') {
                         value = 25;
                     }
-                    else if (value == 'T' || value == 'D') {
+                    else if (value === "T" || value === "D") {
                         var base,
-                            factor = (value == 'T') ? 3 : 2;
+                            factor = (value === "T") ? 3 : 2;
 
                         do {
                             base = Number( prompt('Type in the base value!') );
@@ -109,7 +109,7 @@
                     }
                     else {
                         var base,
-                            factor = (value == 'T') ? 3 : 2;
+                            factor = (value === "T") ? 3 : 2;
 
                         do {
                             base = Number( prompt('Type in the base value!') );
