@@ -1,3 +1,9 @@
 ## Darts
 
-What can I say, peeps be needing a scoreboard, this be a scoreboard for standard cricket and wildcard.
+Darts scorboard web application.
+
+### Features
+
+- Games: Cricket, Mickey Mouse, Wildcards
+- Player: 1-4
+- Options: Cut-Throat

@@ -67,6 +67,18 @@
             });
 
             if (currentMarks === '(X)') { // at current player the mark is closed
+                var posValues = numbers.slice(0);
+                if (value === "D" && numbers.indexOf("B") >= 0) {
+                    posValues.push("25");
+                }
+                var chars = ["T", "D", "B"];
+                for ( i in chars ) {
+                    var j = posValues.indexOf(chars[i]);
+                    if (j >= 0) {
+                        posValues.splice(j, 1);
+                    }
+                }
+
                 if (view.state.cut === true) { // game with option Cut Throat
                     if (value === 'B') {
                         value = 25;
@@ -76,10 +88,11 @@
                             factor = (value === "T") ? 3 : 2;
 
                         do {
-                            base = Number( prompt('Type in the base value!') );
-                        } while (isNaN(base) || base < 1 || base > 20);
+                            base = window.prompt("Type in the base value!");
+                            if (base === null) { return; }
+                        } while (posValues.indexOf(base) === -1);
 
-                        value = base * factor;
+                        value = Number(base) * factor;
                     }
 
                     var scorer = [];
@@ -112,10 +125,11 @@
                             factor = (value === "T") ? 3 : 2;
 
                         do {
-                            base = Number( prompt('Type in the base value!') );
-                        } while (isNaN(base) || base < 1 || base > 20);
+                            base = window.prompt("Type in the base value!");
+                            if (base === null) { return; }
+                        } while (posValues.indexOf(base) === -1);
 
-                        value = base * factor;
+                        value = Number(base) * factor;
                         view.scores[player] += value;
                     }
 
