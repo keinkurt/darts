@@ -32,8 +32,8 @@ Board = Backbone.View.extend(function () {
     ].join(""),
 
     scoreTemplate = [
-        "<% _.each(marks, function (mark) { %>",
-            "<div class='row board-score<%= mark.closed ? ' closed' : '' %>'>",
+        "<% _.each(marks, function (mark, index) { %>",
+            "<div class='row board-score<%= mark.closed ? ' closed' : '' %><%= index + 1 < marks.length && index % 3 === 2 ? ' board-section' : ''%>'>",
                 "<div class='small-1 columns'>&nbsp;</div>",
                 "<% if (mark.players < 3) { %>",
                     "<div class='small-2 columns'>&nbsp;</div>",
