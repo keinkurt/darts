@@ -3,9 +3,17 @@
         "browser": true
     },
     "globals": {
-        $: false,
-        _: false,
-        Marks: true
+        $:          false,
+        _:          false,
+        hopscotch   false,
+        event:      false,
+        i:          true,
+        Marks:      true,
+        Backbone:   true,
+        Games:      true,
+        Board:      true,
+        NavBar:     true,
+        Config:     true
     },
     "rules": {
         strict: 0

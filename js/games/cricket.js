@@ -1,6 +1,4 @@
 (function (global) {
-    var i;
-
     function genericCricket(numbers) {
         function initialize(view) {
             view.collection = new Marks([]);

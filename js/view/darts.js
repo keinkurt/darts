@@ -8,29 +8,29 @@ Darts = Backbone.View.extend(function () {
         var view = this;
 
         view.subviews.Config = new Config();
-        view.subviews.Config.on('new', function (event) {
+        view.subviews.Config.on("new", function (event) {
             // Remove the dialog
             view.subviews.Config.remove();
             // Remove the old board
-            view.subviews.Board && view.subviews.Board.remove();
+            if (view.subviews.Board) { view.subviews.Board.remove(); }
 
             // Append new board wrapper
-            $('.board').append('<div class="large-12 columns js-board-wrapper"></div>');
+            $(".board").append("<div class='large-12 columns js-board-wrapper'></div>");
 
             // Create the board
             view.subviews.Board = new Board({
-                players: event.players,
-                game: event.game,
-                cut: event.cut
+                players:    event.players,
+                game:       event.game,
+                cut:        event.cut
             });
 
             // Assign the board to the wrapper and render
-            view.assign('.js-board-wrapper', view.subviews.Board);
+            view.assign(".js-board-wrapper", view.subviews.Board);
         });
 
         view.subviews.NavBar = new NavBar();
-        view.subviews.NavBar.on('new', function () {
-            view.assign('.js-config-container', view.subviews.Config);
+        view.subviews.NavBar.on("new", function () {
+            view.assign(".js-config-container", view.subviews.Config);
         });
 
         // Render the page
@@ -44,8 +44,8 @@ Darts = Backbone.View.extend(function () {
         var view = this;
 
         view.assign({
-            '.js-nav-bar': view.subviews.NavBar,
-            '.js-config-container': view.subviews.Config
+            ".js-nav-bar": view.subviews.NavBar,
+            ".js-config-container": view.subviews.Config
         });
     }
 
@@ -58,7 +58,7 @@ Darts = Backbone.View.extend(function () {
             selectors = {};
             selectors[selector] = view;
         }
-        if (!selectors) return;
+        if (!selectors) { return; }
         _.each(selectors, function (view, selector) {
             view.setElement(this.$(selector)).render();
         }, this);
