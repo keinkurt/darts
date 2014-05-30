@@ -12,7 +12,7 @@ Board = Backbone.View.extend(function () {
             "<% if (players > 2) { %>",
                 "<div class='small-2 columns player player2<%= player==='player2' ? ' board-header-active' : '' %>'>P2</div>",
             "<% } %>",
-            "<div class='small-2 columns game-mode'>",
+            "<div class='small-2 columns game-mode js-restart-game'>",
                 "<%= game %>",
             "</div>",
             "<% if (players === 2) { %>",
@@ -186,11 +186,19 @@ Board = Backbone.View.extend(function () {
         });
     }
 
+    function restartGame() {
+        var view = this;
+
+        view.initialize();
+        view.render();
+    }
+
     var events = {
         "click .js-mark": updateScore,
         "click .js-undo": undo,
         "mousedown .columns": preventTextSelection,
-        "click .player": nextRound
+        "click .player": nextRound,
+        "click .js-restart-game": restartGame
     };
 
     return {
