@@ -139,6 +139,16 @@ Board = Backbone.View.extend(function () {
         view.logic.initialize(view);
     }
 
+    function newGame() {
+        var view = this;
+
+        view.state.player   = "player1";
+        view.state.rounds   = 0;
+        view.state.actions  = [];
+
+        view.logic.initialize(view);
+    }
+
     function render() {
         var view = this,
             $header = $(view.templates.header(view.state)),
@@ -205,7 +215,7 @@ Board = Backbone.View.extend(function () {
     function restartGame() {
         var view = this;
 
-        view.initialize();
+        view.newGame();
         view.render();
     }
 
@@ -244,6 +254,7 @@ Board = Backbone.View.extend(function () {
         events: events,
 
         initialize: initialize,
+        newGame: newGame,
         render: render
     };
 
