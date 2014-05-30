@@ -15,6 +15,18 @@ body {
     font-size: 2rem;
     border-bottom: 1px solid #000; }
 
+.board-header .edit {
+    display: none;
+}
+
+.board-header .editing .edit {
+    display: block;
+}
+
+.board-header .editing .view {
+    display: none;
+}
+
 .board-section {
     font-size: 2rem;
     border-bottom: 2px solid #BBB;
