@@ -8,21 +8,36 @@ Board = Backbone.View.extend(function () {
             "<% if (players < 3) { %>",
                 "<div class='small-2 columns'>&nbsp;</div>",
             "<% } %>",
-            "<div class='small-2 columns player player1<%= player==='player1' ? ' board-header-active' : '' %>'>P1</div>",
+            "<div class='small-2 columns playerHead player1<%= player==='player1' ? ' board-header-active' : '' %>'>",
+                "<div class='view'><%= playerNames.player1 %></div>",
+                "<input class='edit' type='text' value='<%= playerNames.player1 %>' />",
+            "</div>",
             "<% if (players > 2) { %>",
-                "<div class='small-2 columns player player2<%= player==='player2' ? ' board-header-active' : '' %>'>P2</div>",
+                "<div class='small-2 columns playerHead player2<%= player==='player2' ? ' board-header-active' : '' %>'>",
+                    "<div class='view'><%= playerNames.player2 %></div>",
+                    "<input class='edit' type='text' value='<%= playerNames.player2 %>' />",
+                "</div>",
             "<% } %>",
             "<div class='small-2 columns game-mode'>",
                 "<%= game %>",
             "</div>",
             "<% if (players === 2) { %>",
-                "<div class='small-2 columns player player2<%= player==='player2' ? ' board-header-active' : '' %>'>P2</div>",
+                "<div class='small-2 columns playerHead player2<%= player==='player2' ? ' board-header-active' : '' %>'>",
+                    "<div class='view'><%= playerNames.player2 %></div>",
+                    "<input class='edit' type='text' value='<%= playerNames.player2 %>' />",
+                "</div>",
             "<% } %>",
             "<% if (players > 2) { %>",
-                "<div class='small-2 columns player player3<%= player==='player3' ? ' board-header-active' : '' %>'>P3</div>",
+                "<div class='small-2 columns playerHead player3<%= player==='player3' ? ' board-header-active' : '' %>'>",
+                "<div class='view'><%= playerNames.player3 %></div>",
+                "<input class='edit' type='text' value='<%= playerNames.player3 %>' />",
+                "</div>",
             "<% } %>",
             "<% if (players > 3) { %>",
-                "<div class='small-2 columns player player4<%= player==='player4' ? ' board-header-active' : '' %>'>P4</div>",
+                "<div class='small-2 columns playerHead player4<%= player==='player4' ? ' board-header-active' : '' %>'>",
+                    "<div class='view'><%= playerNames.player4 %></div>",
+                    "<input class='edit' type='text' value='<%= playerNames.player4 %>' />",
+                "</div>",
             "<% } %>",
             "<% if (players < 4) { %>",
                 "<div class='small-2 columns'>&nbsp;</div>",
@@ -114,6 +129,7 @@ Board = Backbone.View.extend(function () {
         view.state = {
             player: "player1",
             players: view.options.players,
+            playerNames: { player1: "P1", player2: "P2", player3: "P3", player4: "P4" },
             game: view.options.game,
             cut: view.options.cut,
             rounds: 0,
@@ -186,11 +202,34 @@ Board = Backbone.View.extend(function () {
         });
     }
 
+    function editPlayer(event) {
+        var view = this,
+            $target = $(event.currentTarget),
+            player = interpretPlayer($target);
+
+        $(".board-header ." + player).addClass("editing");
+        $(".board-header ." + player + " > input").focus().select();
+    }
+
+    function updateOnEnter(event) {
+        if (event.keyCode == 13) {
+            var view = this,
+                $target = $(event.currentTarget),
+                player = interpretPlayer( $target.parent() );
+
+            view.state.playerNames[player] = $target.val();
+            $(".board-header ." + player).removeClass("editing");
+            view.render();
+        }
+    }
+
     var events = {
-        "click .js-mark": updateScore,
-        "click .js-undo": undo,
-        "mousedown .columns": preventTextSelection,
-        "click .player": nextRound
+        "click      .js-mark":      updateScore,
+        "click      .js-undo":      undo,
+        "mousedown  .columns":      preventTextSelection,
+        "click      .player":       nextRound,
+        "dblclick   .playerHead":   editPlayer,
+        "keypress   .edit":         updateOnEnter
     };
 
     return {
