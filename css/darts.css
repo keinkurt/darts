@@ -7,13 +7,20 @@ body {
     text-align: center; }
 
 .board-divider {
-    border-left: 1px solid #000; 
+    border-left: 1px solid #000;
     border-right: 1px solid #000;
     font-size: 3rem; }
 
 .board-header {
     font-size: 2rem;
     border-bottom: 1px solid #000; }
+
+.board-header .columns {
+    padding: 1rem; }
+
+.board-header .active {
+    background-color: #43ac6a;
+    color: #fff; }
 
 .board-header .edit {
     display: none;
@@ -36,13 +43,6 @@ body {
     font-size: 2rem;
     color: #aaa; }
 
-.board-header .columns {
-    padding: 1rem; }
-
-.board-header-active {
-    background-color: #43ac6a;
-    color: #fff; }
-
 .board-score.closed {
     background-color: #eee; }
 
@@ -50,6 +50,10 @@ body {
     font-size: 2rem;
     padding: 1rem;
     height: 4rem; }
+
+/*.board-score .active {*/
+    /*background-color: #C5FFDB;*/
+    /*color: #fff; }*/
 
 .board-footer {
     font-size: 2.5rem;

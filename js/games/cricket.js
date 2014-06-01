@@ -157,9 +157,6 @@
             }
 
             if (currentPlayer !== player) {
-                view.$(".board-header .player").removeClass("board-header-active");
-                view.$(".board-header ." + player).addClass("board-header-active");
-
                 view.state.player = player;
                 view.state.rounds--;
             }
