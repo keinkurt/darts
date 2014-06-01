@@ -18,7 +18,7 @@ Board = Backbone.View.extend(function () {
                     "<input class='edit' type='text' value='<%= playerNames.player2 %>' />",
                 "</div>",
             "<% } %>",
-            "<div class='small-2 columns game-mode'>",
+            "<div class='small-2 columns game-mode js-restart-game'>",
                 "<%= game %>",
             "</div>",
             "<% if (players === 2) { %>",
@@ -139,6 +139,16 @@ Board = Backbone.View.extend(function () {
         view.logic.initialize(view);
     }
 
+    function newGame() {
+        var view = this;
+
+        view.state.player   = "player1";
+        view.state.rounds   = 0;
+        view.state.actions  = [];
+
+        view.logic.initialize(view);
+    }
+
     function render() {
         var view = this,
             $header = $(view.templates.header(view.state)),
@@ -219,6 +229,13 @@ Board = Backbone.View.extend(function () {
         });
     }
 
+    function restartGame() {
+        var view = this;
+
+        view.newGame();
+        view.render();
+    }
+
     function editPlayer(event) {
         var view = this,
             $target = $(event.currentTarget),
@@ -241,12 +258,13 @@ Board = Backbone.View.extend(function () {
     }
 
     var events = {
-        "click      .js-mark":      updateScoreMark,
-        "click      .player":       updateScoreValue,
-        "click      .js-undo":      undo,
-        "mousedown  .columns":      preventTextSelection,
-        "dblclick   .playerHead":   editPlayer,
-        "keypress   .edit":         updateOnEnter
+        "click      .js-mark":          updateScoreMark,
+        "click      .player":           updateScoreValue,
+        "click      .js-undo":          undo,
+        "mousedown  .columns":          preventTextSelection,
+        "dblclick   .playerHead":       editPlayer,
+        "keypress   .edit":             updateOnEnter,
+        "click      .js-restart-game":  restartGame
     };
 
     return {
@@ -254,6 +272,7 @@ Board = Backbone.View.extend(function () {
 
         initialize: initialize,
         nextRound: nextRound,
+        newGame: newGame,
         render: render
     };
 
