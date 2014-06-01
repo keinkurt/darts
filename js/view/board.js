@@ -153,10 +153,26 @@ Board = Backbone.View.extend(function () {
             .append($footer);
     }
 
-    function updateScore(event) {
-        var view = this;
+    function updateScoreMark(event) {
+        var view    = this,
+            $target = $(event.currentTarget);
 
-        view.logic.updateScore(event, view, function () {
+        view.logic.updateScore($target, view, function () {
+            view.render();
+        });
+    }
+
+    function updateScoreValue(event) {
+        var view    = this,
+            $target = $(event.currentTarget),
+            $mark   = $target.siblings('.js-mark'),
+            player  = interpretPlayer($target);
+
+        if (player != view.state.player) {
+            view.nextRound(player);
+        }
+
+        view.logic.updateScore($mark, view, function () {
             view.render();
         });
     }
@@ -172,10 +188,8 @@ Board = Backbone.View.extend(function () {
         return false;
     }
 
-    function nextRound(event) {
-        var view = this,
-            $target = $(event.currentTarget),
-            player = interpretPlayer($target);
+    function nextRound(player) {
+        var view = this;
 
         view.$(".board-header .player").removeClass("board-header-active");
         $(".board-header ." + player).addClass("board-header-active");
@@ -183,7 +197,7 @@ Board = Backbone.View.extend(function () {
         view.state.player = player;
         view.state.rounds++;
 
-        view.logic.nextRound(event, view, function () {
+        view.logic.nextRound(view, function () {
             view.render();
         });
     }
@@ -224,10 +238,10 @@ Board = Backbone.View.extend(function () {
     }
 
     var events = {
-        "click      .js-mark":      updateScore,
+        "click      .js-mark":      updateScoreMark,
+        "click      .player":       updateScoreValue,
         "click      .js-undo":      undo,
         "mousedown  .columns":      preventTextSelection,
-        "click      .player":       nextRound,
         "dblclick   .playerHead":   editPlayer,
         "keypress   .edit":         updateOnEnter
     };
@@ -236,6 +250,7 @@ Board = Backbone.View.extend(function () {
         events: events,
 
         initialize: initialize,
+        nextRound: nextRound,
         render: render
     };
 

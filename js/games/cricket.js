@@ -15,9 +15,8 @@
             };
         }
 
-        function updateScore(event, view, cb) {
-            var $target = $(event.currentTarget),
-                player = view.state.player,
+        function updateScore($target, view, cb) {
+            var player = view.state.player,
                 $player = $("." + player, $target.parent()),
                 currentMarks = $player.text(),
                 valueText = $target.text(),
@@ -134,7 +133,7 @@
             cb();
         }
 
-        function nextRound(event, view, cb) {
+        function nextRound(view, cb) {
             return cb();
         }
 
