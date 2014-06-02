@@ -249,14 +249,19 @@ Board = Backbone.View.extend(function () {
 
     function updateOnEnter(event) {
         if (event.keyCode == 13) {
-            var view = this,
-                $target = $(event.currentTarget),
-                player = interpretPlayer( $target.parent() );
-
-            view.state.playerNames[player] = $target.val();
-            $(".board-header ." + player).removeClass("editing");
-            view.render();
+            this.closeEdit(event);
         }
+    }
+
+    function closeEdit(event) {
+         var view = this,
+             $target = $(event.currentTarget),
+             value = $target.val(),
+             player = interpretPlayer( $target.parent() );
+
+         view.state.playerNames[player] = value;
+         $(".board-header ." + player + " .view").html(value);
+         $(".board-header ." + player).removeClass("editing");
     }
 
     var events = {
@@ -266,6 +271,7 @@ Board = Backbone.View.extend(function () {
         "mousedown  .columns":          preventTextSelection,
         "dblclick   .playerHead":       editPlayer,
         "keypress   .edit":             updateOnEnter,
+        "blur       .edit":             closeEdit,
         "click      .js-restart-game":  restartGame
     };
 
@@ -275,6 +281,7 @@ Board = Backbone.View.extend(function () {
         initialize: initialize,
         nextRound: nextRound,
         newGame: newGame,
+        closeEdit: closeEdit,
         render: render
     };
 
