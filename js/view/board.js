@@ -232,8 +232,10 @@ Board = Backbone.View.extend(function () {
     function restartGame() {
         var view = this;
 
-        view.newGame();
-        view.render();
+        if ( window.confirm("Do you realy want to restart the game?") ) {
+            view.newGame();
+            view.render();
+        }
     }
 
     function editPlayer(event) {
