@@ -130,6 +130,12 @@
                 currentMark.set(player, ++currentScore);
             }
 
+            var notFinished = view.collection.some( function(mark) { return (mark.get(player) < 3); } );
+
+            if (!notFinished) {
+                view.state.finished = player;
+            }
+
             cb();
         }
 

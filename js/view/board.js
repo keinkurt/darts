@@ -133,7 +133,8 @@ Board = Backbone.View.extend(function () {
             game: view.options.game,
             cut: view.options.cut,
             rounds: 0,
-            actions: []
+            actions: [],
+            finished: undefined
         };
 
         view.logic.initialize(view);
@@ -145,6 +146,7 @@ Board = Backbone.View.extend(function () {
         view.state.player   = "player1";
         view.state.rounds   = 0;
         view.state.actions  = [];
+        view.state.finished = undefined;
 
         view.logic.initialize(view);
     }
@@ -171,11 +173,9 @@ Board = Backbone.View.extend(function () {
 
     function updateScoreMark(event) {
         var view    = this,
-            $target = $(event.currentTarget);
+            $mark   = $(event.currentTarget);
 
-        view.logic.updateScore($target, view, function () {
-            view.render();
-        });
+        view.logic.updateScore( $mark, view, function() { return postUpdateScore(view) } );
     }
 
     function updateScoreValue(event) {
@@ -188,9 +188,19 @@ Board = Backbone.View.extend(function () {
             view.nextRound(player);
         }
 
-        view.logic.updateScore($mark, view, function () {
-            view.render();
-        });
+        view.logic.updateScore( $mark, view, function() { return postUpdateScore(view) } );
+    }
+
+    function postUpdateScore(view) {
+        if (view.state.finished) {
+            if ( confirm(view.state.playerNames[view.state.finished] + " has won. Restart the game?") ) {
+                view.newGame();
+            }
+            else {
+                view.state.finished = undefined;
+            }
+        }
+        view.render();
     }
 
     function interpretPlayer($elem) {
