@@ -130,9 +130,19 @@
                 currentMark.set(player, ++currentScore);
             }
 
-            var notFinished = view.collection.some( function(mark) { return (mark.get(player) < 3); } );
+            var marksLeft = view.collection.some( function(mark) { return (mark.get(player) < 3); } );
 
-            if (!notFinished) {
+            var bestScore = true;
+            for ( i in view.scores ) {
+               if ( i === 'players' || i === player )                            { continue; }
+               if ( view.state.cut && view.scores[player] <= view.scores[i] )    { continue; }
+               if ( !view.state.cut && view.scores[player] >= view.scores[i] )   { continue; }
+               bestScore = false;
+               break;
+            }
+            console.log(bestScore);
+
+            if (!marksLeft && bestScore) {
                 view.state.finished = player;
             }
 

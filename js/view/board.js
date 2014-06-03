@@ -193,7 +193,8 @@ Board = Backbone.View.extend(function () {
 
     function postUpdateScore(view) {
         if (view.state.finished) {
-            if ( confirm(view.state.playerNames[view.state.finished] + " has won. Restart the game?") ) {
+            var name = view.state.playerNames[view.state.finished];
+            if ( window.confirm(name + " has won. Restart the game?") ) {
                 view.newGame();
             }
             else {
