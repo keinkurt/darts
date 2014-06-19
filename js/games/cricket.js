@@ -217,6 +217,13 @@
         numbers = _.without(numbers, nextNumber);
     }
 
+    wildcardNumbers.sort( function(a,b) {
+        if ( Number(a) < Number(b) ) { return -1; }
+        if ( Number(a) > Number(b) ) { return 1; }
+        return 0;
+    } );
+
+    wildcardNumbers.reverse();
     wildcardNumbers.push("B");
 
     global.Games.Wildcards = genericCricket(wildcardNumbers);
