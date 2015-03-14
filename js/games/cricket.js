@@ -6,13 +6,10 @@
                 view.collection.push({ value: number, players: view.options.players });
             } );
 
-            view.scores = {
-                player1: 0,
-                player2: 0,
-                player3: 0,
-                player4: 0,
-                players: view.options.players
-            };
+            view.scores = {};
+            for (i=1; i <= view.options.players; i++) {
+               view.scores['player'+i] = 0;
+            }
         }
 
         function updateScore($target, view, cb) {
@@ -134,7 +131,7 @@
 
             var bestScore = true;
             for ( i in view.scores ) {
-               if ( i === 'players' || i === player )                            { continue; }
+               if ( i === player )                                               { continue; }
                if ( view.state.cut && view.scores[player] <= view.scores[i] )    { continue; }
                if ( !view.state.cut && view.scores[player] >= view.scores[i] )   { continue; }
                bestScore = false;
@@ -219,6 +216,13 @@
         numbers = _.without(numbers, nextNumber);
     }
 
+    wildcardNumbers.sort( function(a,b) {
+        if ( Number(a) < Number(b) ) { return -1; }
+        if ( Number(a) > Number(b) ) { return 1; }
+        return 0;
+    } );
+
+    wildcardNumbers.reverse();
     wildcardNumbers.push("B");
 
     global.Games.Wildcards = genericCricket(wildcardNumbers);
