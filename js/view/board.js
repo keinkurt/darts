@@ -3,6 +3,12 @@ var Board;
 Board = Backbone.View.extend(function () {
 
     var headerTemplate = [
+        "<div id='restart-dialog'>",
+            "<p>",
+                "<span class='ui-icon ui-icon-alert' style='float:left; margin:0 7px 20px 0;'></span>",
+                "Do you really want to restart the game?",
+            "</p>",
+        "</div>",
         "<div class='row board-header'>",
             "<div class='small-1 columns'>&nbsp;</div>",
             "<% if (players < 3) { %>",
@@ -138,6 +144,7 @@ Board = Backbone.View.extend(function () {
         };
 
         view.logic.initialize(view);
+
     }
 
     function newGame() {
@@ -169,6 +176,23 @@ Board = Backbone.View.extend(function () {
 
         view.$(".board-score .player").removeClass("active");
         $(".board-score ." + view.state.player).addClass("active");
+
+        $('#restart-dialog').dialog( {
+            title:      "Restart game?",
+            autoOpen:   false,
+            width:      500,
+            resizable:  false,
+            buttons:    {
+                Restart: function() {
+                    $(this).dialog("close");
+                    view.newGame();
+                    view.render();
+                },
+                Cancel: function() {
+                    $(this).dialog("close");
+                }
+            }
+        } );
     }
 
     function updateScoreMark(event) {
@@ -241,12 +265,7 @@ Board = Backbone.View.extend(function () {
     }
 
     function restartGame() {
-        var view = this;
-
-        if ( window.confirm("Do you realy want to restart the game?") ) {
-            view.newGame();
-            view.render();
-        }
+        $("#restart-dialog").dialog("open");
     }
 
     function editPlayer(event) {

@@ -140,7 +140,6 @@
                bestScore = false;
                break;
             }
-            console.log(bestScore);
 
             if (!marksLeft && bestScore) {
                 view.state.finished = player;
