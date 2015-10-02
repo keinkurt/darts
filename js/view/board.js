@@ -24,9 +24,7 @@ Board = Backbone.View.extend(function () {
                     "<input class='edit' type='text' value='<%= playerNames.player2 %>' />",
                 "</div>",
             "<% } %>",
-            "<div class='small-2 columns game-mode js-restart-game'>",
-                "<%= game %>",
-            "</div>",
+            "<a href='javascript:void(0)' class='alert button js-next'>Next</a>",
             "<% if (players === 2) { %>",
                 "<div class='small-2 columns playerHead player2'>",
                     "<div class='view'><%= playerNames.player2 %></div>",
@@ -202,19 +200,6 @@ Board = Backbone.View.extend(function () {
         view.logic.updateScore( $mark, view, function() { return postUpdateScore(view) } );
     }
 
-    function updateScoreValue(event) {
-        var view    = this,
-            $target = $(event.currentTarget),
-            $mark   = $target.siblings('.js-mark'),
-            player  = interpretPlayer($target);
-
-        if (player != view.state.player) {
-            view.nextRound(player);
-        }
-
-        view.logic.updateScore( $mark, view, function() { return postUpdateScore(view) } );
-    }
-
     function postUpdateScore(view) {
         if (view.state.finished) {
             var name = view.state.playerNames[view.state.finished];
@@ -239,15 +224,14 @@ Board = Backbone.View.extend(function () {
         return false;
     }
 
-    function nextRound(player) {
-        var view = this;
+    function nextPlayer() {
+        var view = this,
+            currentPlayer = view.state.player,
+            nextPlayer = currentPlayer === view.state.players ? 1 : currentPlayer + 1;
 
-        view.state.player = player;
-        view.state.rounds++;
-
-        view.logic.nextRound(view, function () {
-            view.render();
-        });
+        if (nextPlayer === 1) {
+            view.state.rounds++;
+        }
     }
 
     function undo() {
@@ -296,7 +280,7 @@ Board = Backbone.View.extend(function () {
 
     var events = {
         "click      .js-mark":          updateScoreMark,
-        "click      .player":           updateScoreValue,
+        "click      .js-next":          nextPlayer,
         "click      .js-undo":          undo,
         "mousedown  .columns":          preventTextSelection,
         "dblclick   .playerHead":       editPlayer,
@@ -309,7 +293,7 @@ Board = Backbone.View.extend(function () {
         events: events,
 
         initialize: initialize,
-        nextRound: nextRound,
+        nextPlayer: nextPlayer,
         newGame: newGame,
         closeEdit: closeEdit,
         render: render
