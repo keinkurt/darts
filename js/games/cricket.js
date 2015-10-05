@@ -8,13 +8,13 @@
 
             view.scores = {};
             for (i=1; i <= view.options.players; i++) {
-               view.scores['player'+i] = 0;
+               view.scores[i] = 0;
             }
         }
 
         function updateScore($target, view, cb) {
             var player = view.state.player,
-                $player = $("." + player, $target.parent()),
+                $player = $(".player" + player, $target.parent()),
                 currentMarks = $player.text(),
                 valueText = $target.text(),
                 value = parseInt(valueText, 10) || valueText,
@@ -23,7 +23,7 @@
             // Delay the highlight so that it runs after re-render is complete.
             // 1337 hax, I know :( will fix later
             setTimeout(function () {
-                $("." + player + ".js-value-" + valueText)
+                $(".player" + player + ".js-value-" + valueText)
                     .stop()
                     .css({backgroundColor: "#ddd"})
                     .animate({backgroundColor: "transparent"}, 1500);
@@ -70,8 +70,8 @@
                     for (i = 1; i <= view.state.players; i++) {
                         if ( $(".player" + i, $target.parent()).text() !== "(X)" ) {
                             // the other player has got open the mark and gets points
-                            view.scores["player" + i] += value;
-                            scorer.push("player" + i);
+                            view.scores[i] += value;
+                            scorer.push(i);
                         }
                     }
                     view.state.actions.push({
@@ -120,7 +120,6 @@
                     valueText: valueText
                 });
             }
-
             var currentScore = currentMark.get(player);
 
             if (currentMark.canScorePoints(player) || currentScore < 3) {
@@ -145,32 +144,48 @@
             cb();
         }
 
-        function nextRound(view, cb) {
-            return cb();
+        function next(view, cb) {
+            var currentPlayer   = parseInt(view.state.player),
+                nextPlayer      = currentPlayer === view.state.players ? 1 : currentPlayer + 1;
+
+            if (nextPlayer === 1) {
+                view.state.rounds++;
+            }
+
+            view.state.player = nextPlayer;
+
+            view.state.actions.push( {
+                type: "next",
+                player: currentPlayer
+            } );
+
+            cb();
         }
 
-        function undo(view, action, currentPlayer, cb) {
-            var type        = action.type,
-                player      = action.player,
-                value       = action.value,
-                valueText   = action.valueText;
+        function undo(view, action, cb) {
+            var currentPlayer   = parseInt(view.state.player),
+                type            = action.type,
+                player          = action.player,
+                value           = action.value,
+                valueText       = action.valueText;
 
             if (type === "points") {
                 view.scores[player] -= value;
-                view.$(".board-footer ." + player).text(view.scores[player]);
+                view.$(".board-footer .player" + player).text(view.scores[player]);
             }
             else if (type === "cut-points") {
                 var scorer = action.scorer;
                 for ( i in scorer ) {
                     view.scores[scorer[i]] -= value;
-                    view.$(".board-footer ." + scorer[i]).text(view.scores[scorer[i]]);
+                    view.$(".board-footer .player" + scorer[i]).text(view.scores[scorer[i]]);
                 }
 
             }
-
-            if (currentPlayer !== player) {
+            else if (type === "next") {
                 view.state.player = player;
-                view.state.rounds--;
+                if (currentPlayer === 1) {
+                    view.state.rounds--;
+                }
             }
 
             view.collection.forEach(function (mark) {
@@ -190,7 +205,7 @@
             initialize: initialize,
 
             updateScore: updateScore,
-            nextRound: nextRound,
+            next: next,
             undo: undo
         };
     }
