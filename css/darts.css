@@ -51,6 +51,14 @@ body {
     padding: 1rem;
     height: 4rem; }
 
+.board-button {
+    display: inline;
+}
+
+.board-button-container {
+    line-height: 2.25rem;
+}
+
 /*.board-score .active {*/
     /*background-color: #C5FFDB;*/
     /*color: #fff; }*/
