@@ -191,6 +191,10 @@ Board = Backbone.View.extend(function () {
                 }
             }
         } );
+
+        var game = view.state.game;
+        game += view.state.cut ? '-Cut' : '';
+        $('.js-game-title').text(game);
     }
 
     function updateScoreMark(event) {

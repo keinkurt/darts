@@ -63,6 +63,17 @@ body {
 .board-footer .columns {
     padding: 1rem; }
 
+.top-bar .game-title {
+    position: absolute;
+    left: 50%;
+    width: 110px;
+    margin-left: -55px;
+}
+
+.text-large {
+    font-size: 1.5rem;
+}
+
 /* -- Modal -- */
 .modal {
     border: none;
