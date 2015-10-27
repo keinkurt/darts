@@ -148,7 +148,7 @@
             var currentPlayer   = parseInt(view.state.player),
                 nextPlayer      = currentPlayer === view.state.players ? 1 : currentPlayer + 1;
 
-            if (nextPlayer === 1) {
+            if (nextPlayer == view.state.startPlayer) {
                 view.state.rounds++;
             }
 
@@ -183,7 +183,7 @@
             }
             else if (type === "next") {
                 view.state.player = player;
-                if (currentPlayer === 1) {
+                if (currentPlayer == view.state.startPlayer) {
                     view.state.rounds--;
                 }
             }

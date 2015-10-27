@@ -10,7 +10,6 @@ Board = Backbone.View.extend(function () {
             "</p>",
         "</div>",
         "<div class='row board-header'>",
-            "<div class='small-1 columns'>&nbsp;</div>",
             "<% if (players < 3) { %>",
                 "<div class='small-2 columns'>&nbsp;</div>",
             "<% } %>",
@@ -24,15 +23,13 @@ Board = Backbone.View.extend(function () {
                     "<input class='edit' type='text' value='<%= playerNames['2'] %>' />",
                 "</div>",
             "<% } %>",
-            "<div class='small-2 columns board-button-container'>",
-                "<a href='javascript:void(0)' class='alert button board-button js-next'>No Score</a>",
-            "</div>",
-            "<% if (players === 2) { %>",
+           "<% if (players === 2) { %>",
                 "<div class='small-2 columns playerHead player2'>",
                     "<div class='view'><%= playerNames['2'] %></div>",
                     "<input class='edit' type='text' value='<%= playerNames['2'] %>' />",
                 "</div>",
             "<% } %>",
+            "<div class='small-2 columns'><%= rounds %></div>",
             "<% if (players > 2) { %>",
                 "<div class='small-2 columns playerHead player3'>",
                 "<div class='view'><%= playerNames['3'] %></div>",
@@ -51,14 +48,15 @@ Board = Backbone.View.extend(function () {
             "<% if (players < 2) { %>",
                 "<div class='small-2 columns'>&nbsp;</div>",
             "<% } %>",
-            "<div class='small-1 columns'>&nbsp;</div>",
+            "<div class='small-2 columns board-button-container'>",
+                "<a href='javascript:void(0)' class='alert button board-button js-next'>No Score</a>",
+            "</div>",
         "</div>"
     ].join(""),
 
     scoreTemplate = [
         "<% _.each(marks, function (mark, index) { %>",
             "<div class='row board-score<%= mark.closed ? ' closed' : '' %><%= index + 1 < marks.length && index % 3 === 2 ? ' board-section' : ''%>'>",
-                "<div class='small-1 columns'>&nbsp;</div>",
                 "<% if (mark.players < 3) { %>",
                     "<div class='small-2 columns'>&nbsp;</div>",
                 "<% } %>",
@@ -84,14 +82,13 @@ Board = Backbone.View.extend(function () {
                 "<% if (mark.players < 2) { %>",
                     "<div class='small-2 columns'>&nbsp;</div>",
                 "<% } %>",
-                "<div class='small-1 columns'>&nbsp;</div>",
+                "<div class='small-2 columns'>&nbsp;</div>",
             "</div>",
         "<% }); %>"
     ].join(""),
 
     footerTemplate = [
         "<div class='row board-footer'>",
-            "<div class='small-1 columns'>&nbsp;</div>",
             "<% if (typeof(scores['3']) === 'undefined') { %>",
                 "<div class='small-2 columns'>&nbsp;</div>",
             "<% } %>",
@@ -117,7 +114,7 @@ Board = Backbone.View.extend(function () {
             "<% if (typeof(scores['2']) === 'undefined') { %>",
                 "<div class='small-2 columns'>&nbsp;</div>",
             "<% } %>",
-            "<div class='small-1 columns'>&nbsp;</div>",
+            "<div class='small-2 columns'>&nbsp;</div>",
         "</div>"
     ].join("");
 
@@ -134,6 +131,7 @@ Board = Backbone.View.extend(function () {
 
         view.state = {
             player: '1',
+            startPlayer: '1',
             players: view.options.players,
             playerNames: { '1': "P1", '2': "P2", '3': "P3", '4': "P4" },
             game: view.options.game,
@@ -148,12 +146,14 @@ Board = Backbone.View.extend(function () {
     }
 
     function newGame() {
-        var view = this;
+        var view = this,
+            player = view.state.player;
 
-        view.state.player   = 1;
-        view.state.rounds   = 0;
-        view.state.actions  = [];
-        view.state.finished = undefined;
+        view.state.startPlayer  = (player < view.state.players) ? player + 1 : 1;
+        view.state.player       = view.state.startPlayer;
+        view.state.rounds       = 1;
+        view.state.actions      = [];
+        view.state.finished     = undefined;
 
         view.logic.initialize(view);
     }
@@ -212,7 +212,7 @@ Board = Backbone.View.extend(function () {
     function postUpdateScore(view) {
         if (view.state.finished) {
             var name = view.state.playerNames[view.state.finished];
-            if ( window.confirm(name + " has won in round " + (view.state.rounds + 1) + ". Restart the game?") ) {
+            if ( window.confirm(name + " has won in round " + (view.state.rounds) + ". Restart the game?") ) {
                 view.newGame();
             }
             else {
