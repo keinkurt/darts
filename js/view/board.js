@@ -265,17 +265,19 @@ Board = Backbone.View.extend(function () {
     }
 
     function editPlayer(event) {
-        var view = this,
-            $target = $(event.currentTarget);
-            player = interpretPlayer($target);
+        var player = interpretPlayer( $(event.currentTarget) );
 
         $(".board-header .player" + player).addClass("editing");
         $(".board-header .player" + player + " > input").focus().select();
     }
 
-    function updateOnEnter(event) {
+    function keypressOnEdit(event) {
         if (event.keyCode == 13) {
             this.closeEdit(event);
+        }
+        else if (event.keyCode == 9) {
+            this.closeEdit(event);
+            this.nextEdit(event);
         }
     }
 
@@ -290,13 +292,22 @@ Board = Backbone.View.extend(function () {
          $(".board-header .player" + player).removeClass("editing");
     }
 
+    function nextEdit(event) {
+        var view = this,
+            player = interpretPlayer( $(event.currentTarget).parent() );
+
+         nextPlayer = (player < view.state.players) ? player + 1 : 1;
+         $(".board-header .player" + nextPlayer).addClass("editing");
+         $(".board-header .player" + nextPlayer + " > input").focus().select();
+    }
+
     var events = {
         "click      .js-mark":          updateScoreMark,
         "click      .js-next":          next,
         "click      .js-undo":          undo,
         "mousedown  .columns":          preventTextSelection,
         "dblclick   .playerHead":       editPlayer,
-        "keypress   .edit":             updateOnEnter,
+        "keypress   .edit":             keypressOnEdit,
         "blur       .edit":             closeEdit,
         "click      .js-restart-game":  restartGame
     };
@@ -307,6 +318,7 @@ Board = Backbone.View.extend(function () {
         initialize: initialize,
         newGame: newGame,
         closeEdit: closeEdit,
+        nextEdit: nextEdit,
         render: render
     };
 
