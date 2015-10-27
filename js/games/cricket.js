@@ -25,8 +25,8 @@
             setTimeout(function () {
                 $(".player" + player + ".js-value-" + valueText)
                     .stop()
-                    .css({backgroundColor: "#ddd"})
-                    .animate({backgroundColor: "transparent"}, 1500);
+                    .css({backgroundColor: "#43AC6A"})
+                    .animate({backgroundColor: "#C5FFDB"}, 1500);
             }, 100);
 
             view.collection.forEach(function (mark) {
