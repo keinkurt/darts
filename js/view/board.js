@@ -25,7 +25,7 @@ Board = Backbone.View.extend(function () {
                 "</div>",
             "<% } %>",
             "<div class='small-2 columns board-button-container'>",
-                "<a href='javascript:void(0)' class='alert button board-button js-next'>Next</a>",
+                "<a href='javascript:void(0)' class='alert button board-button js-next'>No Score</a>",
             "</div>",
             "<% if (players === 2) { %>",
                 "<div class='small-2 columns playerHead player2'>",
@@ -203,10 +203,8 @@ Board = Backbone.View.extend(function () {
         var view    = this,
             $mark   = $(event.currentTarget);
 
-        if (view.state.nextTimer) {
-            clearTimeout(view.state.nextTimer);
-        }
-        view.state.nextTimer = setTimeout('$(".js-next").trigger("click")', 5000);
+        clearTimeout(view.state.nextTimer);
+        view.state.nextTimer = setTimeout('$(".js-next").trigger("click")', 4000);
 
         view.logic.updateScore( $mark, view, function() { return postUpdateScore(view) } );
     }
@@ -240,6 +238,7 @@ Board = Backbone.View.extend(function () {
     function next() {
         var view = this;
 
+        clearTimeout(view.state.nextTimer);
         view.logic.next(view, function() {
             view.render();
         } );
