@@ -254,12 +254,16 @@ Board = Backbone.View.extend(function () {
             return;
         }
 
+        clearTimeout(view.state.nextTimer);
+        view.state.nextTimer = setTimeout('$(".js-next").trigger("click")', 4000);
+
         view.logic.undo(view, action, function() {
             view.render();
         } );
     }
 
     function restartGame() {
+        clearTimeout(view.state.nextTimer);
         $("#restart-dialog").dialog("open");
     }
 
