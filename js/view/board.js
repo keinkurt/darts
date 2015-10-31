@@ -136,20 +136,19 @@ Board = Backbone.View.extend(function () {
             playerNames: { '1': "P1", '2': "P2", '3': "P3", '4': "P4" },
             game: view.options.game,
             cut: view.options.cut,
-            rounds: 0,
+            rounds: 1,
             actions: [],
             finished: undefined
         };
 
         view.logic.initialize(view);
-
     }
 
     function newGame() {
         var view = this,
-            player = view.state.player;
+            lastStartPlayer = parseInt(view.state.startPlayer);
 
-        view.state.startPlayer  = (player < view.state.players) ? player + 1 : 1;
+        view.state.startPlayer  = (lastStartPlayer < view.state.players) ? lastStartPlayer + 1 : 1;
         view.state.player       = view.state.startPlayer;
         view.state.rounds       = 1;
         view.state.actions      = [];
@@ -212,7 +211,9 @@ Board = Backbone.View.extend(function () {
     function postUpdateScore(view) {
         if (view.state.finished) {
             var name = view.state.playerNames[view.state.finished];
-            if ( window.confirm(name + " has won in round " + (view.state.rounds) + ". Restart the game?") ) {
+            clearTimeout(view.state.nextTimer);
+
+            if ( window.confirm(name + " has won. Restart the game?") ) {
                 view.newGame();
             }
             else {
