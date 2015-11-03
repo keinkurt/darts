@@ -15,31 +15,31 @@ Board = Backbone.View.extend(function () {
             "<% } %>",
             "<div class='small-2 columns playerHead player1'>",
                 "<div class='view'><%= playerNames['1'] %></div>",
-                "<input class='edit' type='text' value='<%= playerNames['1'] %>' />",
+                "<input class='edit' type='text' maxlength='9' value='<%= playerNames['1'] %>' />",
             "</div>",
             "<% if (players > 2) { %>",
                 "<div class='small-2 columns playerHead player2'>",
                     "<div class='view'><%= playerNames['2'] %></div>",
-                    "<input class='edit' type='text' value='<%= playerNames['2'] %>' />",
+                    "<input class='edit' type='text' maxlength='9' value='<%= playerNames['2'] %>' />",
                 "</div>",
             "<% } %>",
             "<div class='small-2 columns'><%= rounds %></div>",
             "<% if (players === 2) { %>",
                 "<div class='small-2 columns playerHead player2'>",
                     "<div class='view'><%= playerNames['2'] %></div>",
-                    "<input class='edit' type='text' value='<%= playerNames['2'] %>' />",
+                    "<input class='edit' type='text' maxlength='9' value='<%= playerNames['2'] %>' />",
                 "</div>",
             "<% } %>",
             "<% if (players > 2) { %>",
                 "<div class='small-2 columns playerHead player3'>",
                 "<div class='view'><%= playerNames['3'] %></div>",
-                "<input class='edit' type='text' value='<%= playerNames['3'] %>' />",
+                "<input class='edit' type='text' maxlength='9' value='<%= playerNames['3'] %>' />",
                 "</div>",
             "<% } %>",
             "<% if (players > 3) { %>",
                 "<div class='small-2 columns playerHead player4'>",
                     "<div class='view'><%= playerNames['4'] %></div>",
-                    "<input class='edit' type='text' value='<%= playerNames['4'] %>' />",
+                    "<input class='edit' type='text' maxlength='9' value='<%= playerNames['4'] %>' />",
                 "</div>",
             "<% } %>",
             "<% if (players < 4) { %>",
@@ -291,8 +291,8 @@ Board = Backbone.View.extend(function () {
              value = $target.val(),
              player = interpretPlayer( $target.parent() );
 
-         view.state.playerNames[player] = value;
-         $(".board-header .player" + player + " .view").html(value);
+         view.state.playerNames[player] = value.substring(0, 9);
+         $(".board-header .player" + player + " .view").html(value.substring(0, 9));
          $(".board-header .player" + player).removeClass("editing");
     }
 
