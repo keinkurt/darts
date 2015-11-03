@@ -3,13 +3,7 @@ var Board;
 Board = Backbone.View.extend(function () {
 
     var headerTemplate = [
-        "<div id='restart-dialog'>",
-            "<p>",
-                "<span class='ui-icon ui-icon-alert' style='float:left; margin:0 7px 20px 0;'></span>",
-                "Do you really want to restart the game?",
-            "</p>",
-        "</div>",
-        "<div class='row board-header'>",
+       "<div class='row board-header'>",
             "<% if (players < 3) { %>",
                 "<div class='small-2 columns'>&nbsp;</div>",
             "<% } %>",
@@ -176,23 +170,6 @@ Board = Backbone.View.extend(function () {
         view.$(".board-score .player").removeClass("active");
         $(".board-score .player" + view.state.player).addClass("active");
 
-        $('#restart-dialog').dialog( {
-            title:      "Restart game?",
-            autoOpen:   false,
-            width:      500,
-            resizable:  false,
-            buttons:    {
-                Restart: function() {
-                    $(this).dialog("close");
-                    view.newGame();
-                    view.render();
-                },
-                Cancel: function() {
-                    $(this).dialog("close");
-                }
-            }
-        } );
-
         var game = view.state.game;
         game += view.state.cut ? '-Cut' : '';
         $('.js-game-title').text(game);
@@ -263,11 +240,6 @@ Board = Backbone.View.extend(function () {
         } );
     }
 
-    function restartGame() {
-        clearTimeout(view.state.nextTimer);
-        $("#restart-dialog").dialog("open");
-    }
-
     function editPlayer(event) {
         var player = interpretPlayer( $(event.currentTarget) );
 
@@ -313,7 +285,6 @@ Board = Backbone.View.extend(function () {
         "dblclick   .playerHead":       editPlayer,
         "keypress   .edit":             keypressOnEdit,
         "blur       .edit":             closeEdit,
-        "click      .js-restart-game":  restartGame
     };
 
     return {
