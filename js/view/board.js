@@ -185,6 +185,22 @@ Board = Backbone.View.extend(function () {
         view.logic.updateScore( $mark, view, function() { return postUpdateScore(view) } );
     }
 
+    function updateScoreValue(event) {
+        var view    = this,
+            $target = $(event.currentTarget),
+            $mark   = $target.siblings('.js-mark'),
+            player  = interpretPlayer($target);
+
+        if (player != view.state.player) {
+            return false;
+        }
+
+        clearTimeout(view.state.nextTimer);
+        view.state.nextTimer = setTimeout('$(".js-next").trigger("click")', 4000);
+
+        view.logic.updateScore( $mark, view, function() { return postUpdateScore(view) } );
+    }
+
     function postUpdateScore(view) {
         if (view.state.finished) {
             var name = view.state.playerNames[view.state.finished];
@@ -279,6 +295,7 @@ Board = Backbone.View.extend(function () {
 
     var events = {
         "click      .js-mark":          updateScoreMark,
+        "click      .player":           updateScoreValue,
         "click      .js-next":          next,
         "click      .js-undo":          undo,
         "mousedown  .columns":          preventTextSelection,
