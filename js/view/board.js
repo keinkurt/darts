@@ -179,6 +179,8 @@ Board = Backbone.View.extend(function () {
         var view    = this,
             $mark   = $(event.currentTarget);
 
+        clearTimeout(view.state.nextTimer);
+
         view.logic.updateScore( $mark, view, function() { return postUpdateScore(view) } );
     }
 
@@ -188,6 +190,8 @@ Board = Backbone.View.extend(function () {
             $mark   = $target.siblings('.js-mark'),
             player  = interpretPlayer($target);
 
+        clearTimeout(view.state.nextTimer);
+
         if (player != view.state.player) {
             return false;
         }
@@ -196,8 +200,6 @@ Board = Backbone.View.extend(function () {
     }
 
     function postUpdateScore(view) {
-        clearTimeout(view.state.nextTimer);
-
         if (view.state.finished) {
             var name = view.state.playerNames[view.state.finished];
 
