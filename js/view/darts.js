@@ -28,23 +28,19 @@ Darts = Backbone.View.extend(function () {
             view.assign(".js-board-wrapper", view.subviews.Board);
         });
 
-        view.subviews.NavBar = new NavBar();
-        view.subviews.NavBar.on("new", function () {
-            view.assign(".js-config-container", view.subviews.Config);
-        });
+        //view.subviews.NavBar = new NavBar();
+        //view.subviews.NavBar.on("new", function () {
+            //view.assign(".js-config-container", view.subviews.Config);
+        //});
 
         // Render the page
         view.render();
-
-        // Initialize Foundation
-        $(document).foundation();
     }
 
     function render() {
         var view = this;
 
         view.assign({
-            ".js-nav-bar": view.subviews.NavBar,
             ".js-config-container": view.subviews.Config
         });
     }
