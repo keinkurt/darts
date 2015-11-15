@@ -19,6 +19,7 @@ Config = Backbone.View.extend(function () {
                   "<button type='button' class='btn btn-default'>2</button>",
                   "<button type='button' class='btn btn-default'>3</button>",
                   "<button type='button' class='btn btn-default'>4</button>",
+                  "<button type='button' class='btn btn-default'>5</button>",
                 "</div>",
                 "<h5>Game</h5>",
                 "<div class='btn-group btn-group-lg js-game'>",
@@ -51,63 +52,45 @@ Config = Backbone.View.extend(function () {
     function render() {
         var view = this;
 
-        view.state = {
-            players: 4,
-            game: "Cricket",
-            cut: false
-        };
-
-        view.$el.append(view.templates.modal(view.state))
-
-        //view.$(".js-game .button")
-            //.first()
-            //.removeClass("secondary");
+        view.$el.append(view.templates.modal({}));
     }
 
     function newGame() {
-        var view = this;
+        var view = this,
+            players = parseInt( view.$(".js-players .active").text(), 10),
+            game = view.$(".js-game .active").text(),
+            cut = view.$(".js-options [name='cut']")[0].classList.contains('active');
 
-        view.trigger("new",  view.state);
+        if (players && game) {
+            view.state = {
+                players: players,
+                game: game,
+                cut: cut
+            };
+
+            view.trigger("new",  view.state);
+        }
     }
 
     function updatePlayers(event) {
-        var view = this,
-            $target = $(event.currentTarget),
-            playersText = $target.text(),
-            players = parseInt(playersText, 10);
-
-        view.state.players = players;
-
-        //view.$(".js-players .button").addClass("secondary");
-        //$target.removeClass("secondary");
+        $(".js-players .btn").removeClass("active");
+        $(event.currentTarget).addClass("active");
     }
 
     function updateGame(event) {
-        var view = this,
-            $target = $(event.currentTarget),
-            game = $target.text();
-
-        view.state.game = game;
-
-        //view.$(".js-game .button").addClass("secondary");
-        //$target.removeClass("secondary");
+        $(".js-game .btn").removeClass("active");
+        $(event.currentTarget).addClass("active");
     }
 
     function updateOptions(event) {
-        var view = this,
-            $target = $(event.currentTarget),
-            option = $target.prop("name");
-
-        //view.state[option] = $target.hasClass("secondary") ? true : false;
-
-        //$target.toggleClass("secondary");
+        $(event.currentTarget).toggleClass("active");
     }
 
     var events = {
-        "click .js-new-game": newGame,
-        "click .js-players .button": updatePlayers,
-        "click .js-game .button": updateGame,
-        "click .js-options .button": updateOptions
+        "click .js-new-game":       newGame,
+        "click .js-players .btn":   updatePlayers,
+        "click .js-game .btn":      updateGame,
+        "click .js-options .btn":   updateOptions
     };
 
     return {
