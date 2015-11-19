@@ -6,7 +6,7 @@ Mark = Backbone.Model.extend(function () {
     var defaults = {
         value: 0,
         closed: false,
-        players: 4,
+        players: 5,
         '1': 0,
         player1Text: "&nbsp;",
         '2': 0,
@@ -14,7 +14,9 @@ Mark = Backbone.Model.extend(function () {
         '3': 0,
         player3Text: "&nbsp;",
         '4': 0,
-        player4Text: "&nbsp;"
+        player4Text: "&nbsp;",
+        '5': 0,
+        player5Text: "&nbsp;"
     };
 
     function initialize() {
@@ -37,6 +39,11 @@ Mark = Backbone.Model.extend(function () {
 
         model.on("change:4", function () {
             model.set("player4Text", model.getText(model.get("4")));
+            model.updateClosed();
+        });
+
+        model.on("change:5", function () {
+            model.set("player5Text", model.getText(model.get("5")));
             model.updateClosed();
         });
     }

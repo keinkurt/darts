@@ -18,7 +18,7 @@ Config = Backbone.View.extend(function () {
                   "<button type='button' class='btn btn-default'>1</button>",
                   "<button type='button' class='btn btn-default'>2</button>",
                   "<button type='button' class='btn btn-default'>3</button>",
-                  "<button type='button' class='btn btn-default'>4</button>",
+                  "<button type='button' class='btn btn-default active'>4</button>",
                   "<button type='button' class='btn btn-default'>5</button>",
                 "</div>",
                 "<h5>Game</h5>",
