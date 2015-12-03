@@ -13,12 +13,12 @@
     text-align: center; }
 
 .board-header {
-    font-size: 1.8rem;
+    font-size: 2rem;
     border-bottom: 1px solid #000;
 }
 
 .board-header .rounds {
-    font-size: 2.5rem;
+    font-size: 3rem;
     font-weight: bold;
 }
 

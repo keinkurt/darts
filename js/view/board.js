@@ -9,31 +9,31 @@ Board = Backbone.View.extend(function () {
             "<% } %>",
             "<div class='col-md-2 columns playerHead player1'>",
                 "<div class='view'><%= playerNames['1'] %></div>",
-                "<input class='edit' type='text' maxlength='9' value='<%= playerNames['1'] %>' />",
+                "<input class='col-md-12 edit' type='text' maxlength='12' value='<%= playerNames['1'] %>' />",
             "</div>",
             "<% if (players > 2) { %>",
                 "<div class='col-md-2 columns playerHead player2'>",
                     "<div class='view'><%= playerNames['2'] %></div>",
-                    "<input class='edit' type='text' maxlength='9' value='<%= playerNames['2'] %>' />",
+                    "<input class='col-md-12 edit' type='text' maxlength='12' value='<%= playerNames['2'] %>' />",
                 "</div>",
             "<% } %>",
             "<div class='col-md-2 rounds'><%= rounds %></div>",
             "<% if (players === 2) { %>",
                 "<div class='col-md-2 columns playerHead player2'>",
                     "<div class='view'><%= playerNames['2'] %></div>",
-                    "<input class='edit' type='text' maxlength='9' value='<%= playerNames['2'] %>' />",
+                    "<input class='col-md-12 edit' type='text' maxlength='12' value='<%= playerNames['2'] %>' />",
                 "</div>",
             "<% } %>",
             "<% if (players > 2) { %>",
                 "<div class='col-md-2 columns playerHead player3'>",
                 "<div class='view'><%= playerNames['3'] %></div>",
-                "<input class='edit' type='text' maxlength='9' value='<%= playerNames['3'] %>' />",
+                "<input class='col-md-12 edit' type='text' maxlength='12' value='<%= playerNames['3'] %>' />",
                 "</div>",
             "<% } %>",
             "<% if (players > 3) { %>",
                 "<div class='col-md-2 columns playerHead player4'>",
                     "<div class='view'><%= playerNames['4'] %></div>",
-                    "<input class='edit' type='text' maxlength='9' value='<%= playerNames['4'] %>' />",
+                    "<input class='col-md-12 edit' type='text' maxlength='12' value='<%= playerNames['4'] %>' />",
                 "</div>",
             "<% } %>",
             "<% if (players < 4) { %>",
@@ -45,7 +45,7 @@ Board = Backbone.View.extend(function () {
             "<% if (players === 5) { %>",
                 "<div class='col-md-2 columns playerHead player5'>",
                     "<div class='view'><%= playerNames['5'] %></div>",
-                    "<input class='edit' type='text' maxlength='9' value='<%= playerNames['5'] %>' />",
+                    "<input class='col-md-12 edit' type='text' maxlength='12' value='<%= playerNames['5'] %>' />",
                 "</div>",
             "<% } %>",
         "</div>"
@@ -267,17 +267,13 @@ Board = Backbone.View.extend(function () {
     function editPlayer(event) {
         var player = interpretPlayer( $(event.currentTarget) );
 
-        $(".board-header .player" + player).addClass("editing");
+        $(".board-header .player" + player).addClass("editing").removeClass("active");
         $(".board-header .player" + player + " > input").focus().select();
     }
 
     function keypressOnEdit(event) {
-        if (event.keyCode == 13) {
+        if ( event.keyCode == 13 || event.keyCode == 9 ) {
             this.closeEdit(event);
-        }
-        else if (event.keyCode == 9) {
-            this.closeEdit(event);
-            this.nextEdit(event);
         }
     }
 
@@ -287,18 +283,19 @@ Board = Backbone.View.extend(function () {
              value = $target.val(),
              player = interpretPlayer( $target.parent() );
 
-         view.state.playerNames[player] = value.substring(0, 9);
-         $(".board-header .player" + player + " .view").html(value.substring(0, 9));
+         view.state.playerNames[player] = value.substring(0, 12);
+         $(".board-header .player" + player + " .view").html(value.substring(0, 12));
          $(".board-header .player" + player).removeClass("editing");
-    }
 
-    function nextEdit(event) {
-        var view = this,
-            player = interpretPlayer( $(event.currentTarget).parent() );
+         if (player == view.state.player) {
+             $(".board-header .player" + player).addClass("active");
+         }
 
-         nextPlayer = (player < view.state.players) ? player + 1 : 1;
-         $(".board-header .player" + nextPlayer).addClass("editing");
-         $(".board-header .player" + nextPlayer + " > input").focus().select();
+         if (event.keyCode == 9) {
+             var nextPlayer = (player < view.state.players) ? player + 1 : 1;
+             $(".board-header .player" + nextPlayer).addClass("editing").removeClass("active");
+             $(".board-header .player" + nextPlayer + " > input").focus().select();
+         }
     }
 
     var events = {
@@ -318,7 +315,6 @@ Board = Backbone.View.extend(function () {
         initialize: initialize,
         newGame: newGame,
         closeEdit: closeEdit,
-        nextEdit: nextEdit,
         render: render
     };
 
