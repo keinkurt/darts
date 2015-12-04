@@ -1,22 +1,30 @@
-body {
-    font-family: 'Segoe UI', Tahoma, Arial;
-    font-size: 1rem; }
+.navbar .navbar-nav {
+    display: inline-block;
+    float: none;
+    vertical-align: top;
+}
+
+.navbar .navbar-collapse {
+    text-align: center;
+}
 
 .board {
     padding-top: 1.25rem;
     text-align: center; }
 
-.board-divider {
-    border-left: 1px solid #000;
-    border-right: 1px solid #000;
-    font-size: 3rem; }
-
 .board-header {
-    font-size: 1.8rem;
-    border-bottom: 1px solid #000; }
+    font-size: 2rem;
+    border-bottom: 1px solid #000;
+}
+
+.board-header .rounds {
+    font-size: 3rem;
+    font-weight: bold;
+}
 
 .board-header .columns {
-    padding: 0.8rem; }
+    padding: 0.8rem;
+}
 
 .board-header .active {
     background-color: #43AC6A;
@@ -39,96 +47,32 @@ body {
     border-bottom: 2px solid #BBB;
 }
 
-.game-mode {
-    font-size: 2rem;
-    color: #aaa; }
-
 .board-score.closed {
-    background-color: #eee; }
+    background-color: #eee;
+}
 
 .board-score .columns {
     font-size: 3rem;
-    padding: 0.8rem;
-    height: 4.5rem; }
-
-.board-button {
-    display: inline;
-    padding-bottom: 1rem;
-}
-
-.board-button-container {
-    line-height: 2.25rem;
+    height: 4.5rem;
 }
 
 .board-score .active {
     background-color: #C5FFDB;
-    /*color: #fff;*/
+}
+
+.board-divider {
+    border-left: 1px solid #000;
+    border-right: 1px solid #000;
 }
 
 .board-footer {
-    font-size: 2.5rem;
+    font-size: 3rem;
     font-weight: bold;
-    border-top: 1px solid #000; }
-
-.board-footer .columns {
-    padding: 1rem; }
-
-.top-bar .game-title {
-    position: absolute;
-    left: 50%;
-    width: 200px;
-    margin-left: -100px;
+    border-top: 1px solid #000;
 }
 
-/* -- Modal -- */
-.modal {
-    border: none;
-    margin: auto;
-    position: absolute;
-    top: -560px;
-    right: 0;
-    left: 0;
-    background: #fff;
-    height: 480px;
-    width: 560px;
-    padding: 0.5rem;
-    box-shadow: 0 0 1em #000;
-    overflow: auto;
-    z-index: 1006;
-    display: none;
-    -webkit-transition: all 0.3s;
-    -moz-transition: all 0.3s;
-    transition: all 0.3s; }
+.board-footer .columns {
+    padding: 1rem;
+}
 
-.modal-header {
-    width: 85%;
-    width: calc(100% - 95px) !important;
-    margin: 1rem 2rem; }
 
-.modal-description {
-    width: 85%;
-    width: calc(100% - 95px) !important;
-    margin: 1rem 2rem;
-    color: #666666; }
-
-.modal-background {
-    z-index: 1005;
-    opacity: 0.5;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background-color: grey;
-    display: none; }
-
-.modal-footer {
-    position: absolute;
-    bottom: 1rem;
-    right: 2rem;
-    text-align: right;
-    width: 85%;
-    margin: 1rem 2rem; }
-
-.modal-footer .button {
-    margin-left: 1rem; }

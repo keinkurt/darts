@@ -2,37 +2,42 @@ var Config;
 
 Config = Backbone.View.extend(function () {
 
-    var overlayTemplate = [
-        "<div class='js-modal-background modal-background'>",
-        "</div>"
-    ].join(""),
-
     template = [
-        "<div class='js-modal-dialog modal'>",
-            "<div class='modal-header'><h3>Game</h3></div>",
-            "<div class='modal-description'>",
-                "<label for='tabs'># of Players</label>",
-                "<ul class='button-group js-players'>",
-                    "<li><a href='#' class='button secondary'>1</a></li>",
-                    "<li><a href='#' class='button secondary'>2</a></li>",
-                    "<li><a href='#' class='button secondary'>3</a></li>",
-                    "<li><a href='#' class='button'>4</a></li>",
-                "</ul>",
-                "<label for='tabs'>Game</label>",
-                "<ul class='button-group js-game'>",
-                    "<% _.each(Games, function (game, name) { %>",
-                        "<li><a href='#' class='button secondary'><%= name %></a></li>",
-                    "<% }); %>",
-                "</ul>",
-                "<label for='tabs'>Options</label>",
-                "<ul class='button-group js-options'>",
-                     "<li><a href='#' name='cut' class='button secondary'>Cut-Throat</a></li>",
-                "</ul>",
+        "<div class='modal fade' id='config-modal' role='dialog'>",
+          "<div class='modal-dialog' role='document'>",
+            "<div class='modal-content'>",
+              "<div class='modal-header'>",
+                "<button type='button' class='close' data-dismiss='modal' aria-label='close'>",
+                  "<span aria-hidden='true'>&times;</span>",
+                "</button>",
+                "<h4 class='modal-title'>Game</h4>",
+              "</div>",
+              "<div class='modal-body'>",
+                "<h5># of Players</h5>",
+                "<div class='btn-group btn-group-lg js-players' id='players'>",
+                  "<button type='button' class='btn btn-default'>1</button>",
+                  "<button type='button' class='btn btn-default'>2</button>",
+                  "<button type='button' class='btn btn-default'>3</button>",
+                  "<button type='button' class='btn btn-default active'>4</button>",
+                  "<button type='button' class='btn btn-default'>5</button>",
+                "</div>",
+                "<h5>Game</h5>",
+                "<div class='btn-group btn-group-lg js-game'>",
+                  "<% _.each(Games, function (game, name) { %>",
+                    "<button type='button' class='btn btn-default'><%= name %></button>",
+                  "<% }); %>",
+                "</div>",
+                "<h5>Options</h5>",
+                "<div class='btn-group btn-group-lg js-options'>",
+                   "<button type='button' name='cut' class='btn btn-default'>Cut-Throat</button>",
+                "</div>",
+              "</div>",
+              "<div class='modal-footer'>",
+                "<button type='button' class='btn btn-default' data-dismiss='modal'>Cancel</a>",
+                "<button type='button' class='btn btn-primary js-new-game'>OK</a>",
+              "</div>",
             "</div>",
-            "<div class='modal-footer'>",
-                "<a href='#' class='js-modal-close'>Cancel</a>",
-                "<a href='#' class='button success js-new-game'>OK</a>",
-            "</div>",
+          "</div>",
         "</div>"
     ].join("");
 
@@ -40,7 +45,6 @@ Config = Backbone.View.extend(function () {
         var view = this;
 
         view.templates = {
-            overlay: _.template(overlayTemplate),
             modal: _.template(template)
         };
     }
@@ -48,89 +52,45 @@ Config = Backbone.View.extend(function () {
     function render() {
         var view = this;
 
-        view.state = {
-            players: 4,
-            game: "Cricket",
-            cut: false
-        };
-
-        $("body")
-            .append(view.templates.overlay({}))
-            .find(".js-modal-background")
-            .fadeIn(100);
-
-        view.$el
-            .append(view.templates.modal(view.state))
-            .find(".js-modal-dialog")
-            .fadeIn(100)
-            .css({ top: 0 });
-
-        view.$(".js-game .button")
-            .first()
-            .removeClass("secondary");
-    }
-
-    function remove(event) {
-        var $dialog = $(".js-modal-dialog"),
-            $background = $(".js-modal-background");
-
-        if (event) { event.preventDefault(); }
-
-        $dialog
-            .css({ top: "-560px" });
-
-        $background
-            .fadeOut(300, function onComplete() {
-                $background.remove();
-                $dialog.remove();
-            });
+        view.$el.append(view.templates.modal({}));
     }
 
     function newGame() {
-        var view = this;
+        var view = this,
+            players = parseInt( view.$(".js-players .active").text(), 10),
+            game = view.$(".js-game .active").text(),
+            cut = view.$(".js-options [name='cut']")[0].classList.contains('active');
 
-        view.trigger("new",  view.state);
+        if (players && game) {
+            view.state = {
+                players: players,
+                game: game,
+                cut: cut
+            };
+
+            view.trigger("new",  view.state);
+        }
     }
 
     function updatePlayers(event) {
-        var view = this,
-            $target = $(event.currentTarget),
-            playersText = $target.text(),
-            players = parseInt(playersText, 10);
-
-        view.state.players = players;
-
-        view.$(".js-players .button").addClass("secondary");
-        $target.removeClass("secondary");
+        $(".js-players .btn").removeClass("active");
+        $(event.currentTarget).addClass("active");
     }
 
     function updateGame(event) {
-        var view = this,
-            $target = $(event.currentTarget),
-            game = $target.text();
-
-        view.state.game = game;
-
-        view.$(".js-game .button").addClass("secondary");
-        $target.removeClass("secondary");
+        $(".js-game .btn").removeClass("active");
+        $(event.currentTarget).addClass("active");
     }
 
     function updateOptions(event) {
-        var view = this,
-            $target = $(event.currentTarget),
-            option = $target.prop("name");
-
-        view.state[option] = $target.hasClass("secondary") ? true : false;
-
-        $target.toggleClass("secondary");
+        $(event.currentTarget).toggleClass("active");
     }
 
     var events = {
-        "click .js-modal-close" : remove,
-        "click .js-new-game": newGame,
-        "click .js-players .button": updatePlayers,
-        "click .js-game .button": updateGame,
-        "click .js-options .button": updateOptions
+        "click .js-new-game":       newGame,
+        "click .js-players .btn":   updatePlayers,
+        "click .js-game .btn":      updateGame,
+        "click .js-options .btn":   updateOptions
     };
 
     return {
@@ -139,7 +99,6 @@ Config = Backbone.View.extend(function () {
 
         initialize: initialize,
         render: render,
-        remove: remove
-    }; 
+    };
 
 }());

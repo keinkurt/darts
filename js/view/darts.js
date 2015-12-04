@@ -10,12 +10,12 @@ Darts = Backbone.View.extend(function () {
         view.subviews.Config = new Config();
         view.subviews.Config.on("new", function (event) {
             // Remove the dialog
-            view.subviews.Config.remove();
+            $('#config-modal').modal('hide');
             // Remove the old board
             if (view.subviews.Board) { view.subviews.Board.remove(); }
 
             // Append new board wrapper
-            $(".board").append("<div class='large-12 columns js-board-wrapper'></div>");
+            $(".board").append("<div id='board-wrapper' class='container'></div>");
 
             // Create the board
             view.subviews.Board = new Board({
@@ -24,27 +24,22 @@ Darts = Backbone.View.extend(function () {
                 cut:        event.cut
             });
 
-            // Assign the board to the wrapper and render
-            view.assign(".js-board-wrapper", view.subviews.Board);
-        });
+            // Show game title at NavBar
+            var game = event.game + (event.cut ? ' - Cut' : '');
+            $('.game-title').text(game);
 
-        view.subviews.NavBar = new NavBar();
-        view.subviews.NavBar.on("new", function () {
-            view.assign(".js-config-container", view.subviews.Config);
+            // Assign the board to the wrapper and render
+            view.assign("#board-wrapper", view.subviews.Board);
         });
 
         // Render the page
         view.render();
-
-        // Initialize Foundation
-        $(document).foundation();
     }
 
     function render() {
         var view = this;
 
         view.assign({
-            ".js-nav-bar": view.subviews.NavBar,
             ".js-config-container": view.subviews.Config
         });
     }

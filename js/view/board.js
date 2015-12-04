@@ -5,46 +5,49 @@ Board = Backbone.View.extend(function () {
     var headerTemplate = [
        "<div class='row board-header'>",
             "<% if (players < 3) { %>",
-                "<div class='small-2 columns'>&nbsp;</div>",
+                "<div class='col-md-2 columns'>&nbsp;</div>",
             "<% } %>",
-            "<div class='small-2 columns playerHead player1'>",
+            "<div class='col-md-2 columns playerHead player1'>",
                 "<div class='view'><%= playerNames['1'] %></div>",
-                "<input class='edit' type='text' maxlength='9' value='<%= playerNames['1'] %>' />",
+                "<input class='col-md-12 edit' type='text' maxlength='12' value='<%= playerNames['1'] %>' />",
             "</div>",
             "<% if (players > 2) { %>",
-                "<div class='small-2 columns playerHead player2'>",
+                "<div class='col-md-2 columns playerHead player2'>",
                     "<div class='view'><%= playerNames['2'] %></div>",
-                    "<input class='edit' type='text' maxlength='9' value='<%= playerNames['2'] %>' />",
+                    "<input class='col-md-12 edit' type='text' maxlength='12' value='<%= playerNames['2'] %>' />",
                 "</div>",
             "<% } %>",
-            "<div class='small-2 columns'><%= rounds %></div>",
+            "<div class='col-md-2 rounds'><%= rounds %></div>",
             "<% if (players === 2) { %>",
-                "<div class='small-2 columns playerHead player2'>",
+                "<div class='col-md-2 columns playerHead player2'>",
                     "<div class='view'><%= playerNames['2'] %></div>",
-                    "<input class='edit' type='text' maxlength='9' value='<%= playerNames['2'] %>' />",
+                    "<input class='col-md-12 edit' type='text' maxlength='12' value='<%= playerNames['2'] %>' />",
                 "</div>",
             "<% } %>",
             "<% if (players > 2) { %>",
-                "<div class='small-2 columns playerHead player3'>",
+                "<div class='col-md-2 columns playerHead player3'>",
                 "<div class='view'><%= playerNames['3'] %></div>",
-                "<input class='edit' type='text' maxlength='9' value='<%= playerNames['3'] %>' />",
+                "<input class='col-md-12 edit' type='text' maxlength='12' value='<%= playerNames['3'] %>' />",
                 "</div>",
             "<% } %>",
             "<% if (players > 3) { %>",
-                "<div class='small-2 columns playerHead player4'>",
+                "<div class='col-md-2 columns playerHead player4'>",
                     "<div class='view'><%= playerNames['4'] %></div>",
-                    "<input class='edit' type='text' maxlength='9' value='<%= playerNames['4'] %>' />",
+                    "<input class='col-md-12 edit' type='text' maxlength='12' value='<%= playerNames['4'] %>' />",
                 "</div>",
             "<% } %>",
             "<% if (players < 4) { %>",
-                "<div class='small-2 columns'>&nbsp;</div>",
+                "<div class='col-md-2 columns'>&nbsp;</div>",
             "<% } %>",
             "<% if (players < 2) { %>",
-                "<div class='small-2 columns'>&nbsp;</div>",
+                "<div class='col-md-2 columns'>&nbsp;</div>",
             "<% } %>",
-            "<div class='small-2 columns board-button-container'>",
-                "<a href='javascript:void(0)' class='alert button board-button js-next'>No Score</a>",
-            "</div>",
+            "<% if (players === 5) { %>",
+                "<div class='col-md-2 columns playerHead player5'>",
+                    "<div class='view'><%= playerNames['5'] %></div>",
+                    "<input class='col-md-12 edit' type='text' maxlength='12' value='<%= playerNames['5'] %>' />",
+                "</div>",
+            "<% } %>",
         "</div>"
     ].join(""),
 
@@ -52,31 +55,33 @@ Board = Backbone.View.extend(function () {
         "<% _.each(marks, function (mark, index) { %>",
             "<div class='row board-score<%= mark.closed ? ' closed' : '' %><%= index + 1 < marks.length && index % 3 === 2 ? ' board-section' : ''%>'>",
                 "<% if (mark.players < 3) { %>",
-                    "<div class='small-2 columns'>&nbsp;</div>",
+                    "<div class='col-md-2 columns'>&nbsp;</div>",
                 "<% } %>",
-                "<div class='small-2 columns player player1 js-value-<%= mark.value %>'><%= mark.player1Text %></div>",
+                "<div class='col-md-2 columns player player1 js-value-<%= mark.value %>'><%= mark.player1Text %></div>",
                 "<% if (mark.players > 2) { %>",
-                    "<div class='small-2 columns player player2 js-value-<%= mark.value %>'><%= mark.player2Text %></div>",
+                    "<div class='col-md-2 columns player player2 js-value-<%= mark.value %>'><%= mark.player2Text %></div>",
                 "<% } %>",
-                "<div class='small-2 columns label board-divider js-mark'>",
+                "<div class='col-md-2 columns bg-primary board-divider js-mark'>",
                     "<%= mark.value %>",
                 "</div>",
                 "<% if (mark.players === 2) { %>",
-                    "<div class='small-2 columns player player2 js-value-<%= mark.value %>'><%= mark.player2Text %></div>",
+                    "<div class='col-md-2 columns player player2 js-value-<%= mark.value %>'><%= mark.player2Text %></div>",
                 "<% } %>",
                 "<% if (mark.players > 2) { %>",
-                    "<div class='small-2 columns player player3 js-value-<%= mark.value %>'><%= mark.player3Text %></div>",
+                    "<div class='col-md-2 columns player player3 js-value-<%= mark.value %>'><%= mark.player3Text %></div>",
                 "<% } %>",
                 "<% if (mark.players > 3) { %>",
-                    "<div class='small-2 columns player player4 js-value-<%= mark.value %>'><%= mark.player4Text %></div>",
+                    "<div class='col-md-2 columns player player4 js-value-<%= mark.value %>'><%= mark.player4Text %></div>",
                 "<% } %>",
                 "<% if (mark.players < 4) { %>",
-                    "<div class='small-2 columns'>&nbsp;</div>",
+                    "<div class='col-md-2 columns'>&nbsp;</div>",
                 "<% } %>",
                 "<% if (mark.players < 2) { %>",
-                    "<div class='small-2 columns'>&nbsp;</div>",
+                    "<div class='col-md-2 columns'>&nbsp;</div>",
                 "<% } %>",
-                "<div class='small-2 columns'>&nbsp;</div>",
+                "<% if (mark.players === 5) { %>",
+                    "<div class='col-md-2 columns player player5 js-value-<%= mark.value %>'><%= mark.player5Text %></div>",
+                "<% } %>",
             "</div>",
         "<% }); %>"
     ].join(""),
@@ -84,31 +89,36 @@ Board = Backbone.View.extend(function () {
     footerTemplate = [
         "<div class='row board-footer'>",
             "<% if (typeof(scores['3']) === 'undefined') { %>",
-                "<div class='small-2 columns'>&nbsp;</div>",
+                "<div class='col-md-2 columns'>&nbsp;</div>",
             "<% } %>",
-            "<div class='small-2 columns player1'><%= scores['1'] %></div>",
+            "<div class='col-md-2 columns player1'><%= scores['1'] %></div>",
             "<% if (typeof(scores['3']) !== 'undefined') { %>",
-                "<div class='small-2 columns player2'><%= scores['2'] %></div>",
+                "<div class='col-md-2 columns player2'><%= scores['2'] %></div>",
             "<% } %>",
-            "<div class='small-2 columns bord-button-container'>",
-                "<a href='javascript:void(0)' class='alert button board-button js-undo'>Undo</a>",
+            "<div class='col-md-1 columns'>",
+                "<button type='button' class='btn btn-primary js-next'>No Score</a>",
+            "</div>",
+            "<div class='col-md-1 columns'>",
+                "<button type='button' class='btn btn-primary js-undo'>Undo</a>",
             "</div>",
             "<% if (typeof(scores['2']) !== 'undefined' && typeof(scores['3']) === 'undefined') { %>",
-                "<div class='small-2 columns player2'><%= scores['2'] %></div>",
+                "<div class='col-md-2 columns player2'><%= scores['2'] %></div>",
             "<% } %>",
             "<% if (typeof(scores['3']) !== 'undefined') { %>",
-                "<div class='small-2 columns player3'><%= scores['3'] %></div>",
+                "<div class='col-md-2 columns player3'><%= scores['3'] %></div>",
             "<% } %>",
             "<% if (typeof(scores['4']) !== 'undefined') { %>",
-                "<div class='small-2 columns player4'><%= scores['4'] %></div>",
+                "<div class='col-md-2 columns player4'><%= scores['4'] %></div>",
             "<% } %>",
             "<% if (typeof(scores['4']) === 'undefined') { %>",
-                "<div class='small-2 columns'>&nbsp;</div>",
+                "<div class='col-md-2 columns'>&nbsp;</div>",
             "<% } %>",
             "<% if (typeof(scores['2']) === 'undefined') { %>",
-                "<div class='small-2 columns'>&nbsp;</div>",
+                "<div class='col-md-2 columns'>&nbsp;</div>",
             "<% } %>",
-            "<div class='small-2 columns'>&nbsp;</div>",
+            "<% if (typeof(scores['5']) !== 'undefined') { %>",
+                "<div class='col-md-2 columns player5'><%= scores['5'] %></div>",
+            "<% } %>",
         "</div>"
     ].join("");
 
@@ -127,7 +137,7 @@ Board = Backbone.View.extend(function () {
             player: '1',
             startPlayer: '1',
             players: view.options.players,
-            playerNames: { '1': "P1", '2': "P2", '3': "P3", '4': "P4" },
+            playerNames: { '1': "P1", '2': "P2", '3': "P3", '4': "P4", '5': "P5" },
             game: view.options.game,
             cut: view.options.cut,
             rounds: 1,
@@ -169,10 +179,6 @@ Board = Backbone.View.extend(function () {
 
         view.$(".board-score .player").removeClass("active");
         $(".board-score .player" + view.state.player).addClass("active");
-
-        var game = view.state.game;
-        game += view.state.cut ? '-Cut' : '';
-        $('.js-game-title').text(game);
     }
 
     function updateScoreMark(event) {
@@ -222,6 +228,7 @@ Board = Backbone.View.extend(function () {
             : $elem.hasClass("player2") ? 2
             : $elem.hasClass("player3") ? 3
             : $elem.hasClass("player4") ? 4
+            : $elem.hasClass("player5") ? 5
             : 0;
     }
 
@@ -250,7 +257,6 @@ Board = Backbone.View.extend(function () {
         }
 
         clearTimeout(view.state.nextTimer);
-        view.state.nextTimer = setTimeout('$(".js-next").trigger("click")', 4000);
 
         view.logic.undo(view, action, function() {
             view.render();
@@ -260,17 +266,13 @@ Board = Backbone.View.extend(function () {
     function editPlayer(event) {
         var player = interpretPlayer( $(event.currentTarget) );
 
-        $(".board-header .player" + player).addClass("editing");
+        $(".board-header .player" + player).addClass("editing").removeClass("active");
         $(".board-header .player" + player + " > input").focus().select();
     }
 
     function keypressOnEdit(event) {
-        if (event.keyCode == 13) {
+        if ( event.keyCode == 13 || event.keyCode == 9 ) {
             this.closeEdit(event);
-        }
-        else if (event.keyCode == 9) {
-            this.closeEdit(event);
-            this.nextEdit(event);
         }
     }
 
@@ -280,18 +282,19 @@ Board = Backbone.View.extend(function () {
              value = $target.val(),
              player = interpretPlayer( $target.parent() );
 
-         view.state.playerNames[player] = value.substring(0, 9);
-         $(".board-header .player" + player + " .view").html(value.substring(0, 9));
+         view.state.playerNames[player] = value.substring(0, 12);
+         $(".board-header .player" + player + " .view").html(value.substring(0, 12));
          $(".board-header .player" + player).removeClass("editing");
-    }
 
-    function nextEdit(event) {
-        var view = this,
-            player = interpretPlayer( $(event.currentTarget).parent() );
+         if (player == view.state.player) {
+             $(".board-header .player" + player).addClass("active");
+         }
 
-         nextPlayer = (player < view.state.players) ? player + 1 : 1;
-         $(".board-header .player" + nextPlayer).addClass("editing");
-         $(".board-header .player" + nextPlayer + " > input").focus().select();
+         if (event.keyCode == 9) {
+             var nextPlayer = (player < view.state.players) ? player + 1 : 1;
+             $(".board-header .player" + nextPlayer).addClass("editing").removeClass("active");
+             $(".board-header .player" + nextPlayer + " > input").focus().select();
+         }
     }
 
     var events = {
@@ -311,7 +314,6 @@ Board = Backbone.View.extend(function () {
         initialize: initialize,
         newGame: newGame,
         closeEdit: closeEdit,
-        nextEdit: nextEdit,
         render: render
     };
 
